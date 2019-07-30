@@ -4,4 +4,3 @@ print(sc.textFile("C:\\deckofcards.txt").first())
 
 rdd = sc.textFile("C:\\deckofcards.txt")
 print(rdd.count())
-d
