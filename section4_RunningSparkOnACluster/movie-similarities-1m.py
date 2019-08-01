@@ -5,22 +5,22 @@ from math import sqrt
 #To run on EMR successfully + output results for Star Wars:
 #aws s3 cp s3://sundog-spark/MovieSimilarities1M.py ./
 #aws s3 sp c3://sundog-spark/ml-1m/movies.dat ./
-#spark-submit --executor-memory 1g MovieSimilarities1M.py 260
+#spark-submit --executor-memory 1g MovieSimilarities1M.py 260 -> Starwars 의 ID도 바뀜
 
 def loadMovieNames():
     movieNames = {}
-    with open("movies.dat") as f:
+    with open("C://TamingBigdataWithSparkAndPython/data/ml-1m/movies.dat") as f:
         for line in f:
             fields = line.split("::")
             movieNames[int(fields[0])] = fields[1].decode('ascii', 'ignore')
     return movieNames
 
-def makePairs((user, ratings)):
+def makePairs(user, ratings):
     (movie1, rating1) = ratings[0]
     (movie2, rating2) = ratings[1]
     return ((movie1, movie2), (rating1, rating2))
 
-def filterDuplicates( (userID, ratings) ):
+def filterDuplicates( userID, ratings ):
     (movie1, rating1) = ratings[0]
     (movie2, rating2) = ratings[1]
     return movie1 < movie2
@@ -44,12 +44,17 @@ def computeCosineSimilarity(ratingPairs):
     return (score, numPairs)
 
 
+#Master에서 실행할때 command로 설정값을 넘겨줄 것이기 때문에 conf 비워둠
+# pre-configured on EMR like Elastic Map Reduce, that will automically tell Spark to run on top of Hadoop YARN
+# using Cluster that I've created using EMR.
 conf = SparkConf()
 sc = SparkContext(conf = conf)
 
 print("\nLoading movie names...")
 nameDict = loadMovieNames()
 
+# s3n : Amazon's simple storage service and that os actually a distributed and redundant data store
+# EMR이 S3와 fast, good connectivity! 여기다가 data를 저장해놓으면 조핟.
 data = sc.textFile("s3n://sundog-spark/ml-1m/ratings.dat")
 
 # Map ratings to key / value pairs: user ID => movie ID, rating
@@ -90,12 +95,12 @@ if (len(sys.argv) > 1):
 
     # Filter for movies with this sim that are "good" as defined by
     # our quality thresholds above
-    filteredResults = moviePairSimilarities.filter(lambda((pair,sim)): \
+    filteredResults = moviePairSimilarities.filter(lambda pair,sim : \
         (pair[0] == movieID or pair[1] == movieID) \
         and sim[0] > scoreThreshold and sim[1] > coOccurenceThreshold)
 
     # Sort by quality score.
-    results = filteredResults.map(lambda((pair,sim)): (sim, pair)).sortByKey(ascending = False).take(10)
+    results = filteredResults.map(lambda pair,sim: (sim, pair)).sortByKey(ascending = False).take(10)
 
     print("Top 10 similar movies for " + nameDict[movieID])
     for result in results:

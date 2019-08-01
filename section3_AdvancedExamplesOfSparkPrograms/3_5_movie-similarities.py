@@ -1,10 +1,18 @@
+# local[*] 1 : 0:02:28.698462  / 2: 0:02:01.168728(다른프로그램닫은상태) / 0:01:59.344531 / 0:02:00.563322
+# local : 1: 0:02:18.990531 / 2:0:02:30.682765 (다른거 돌림 ㅠㅠ) / 0:02:20.228207 / 0:02:20.760715
+# 차이가 있음!
+
 import sys
 from pyspark import SparkConf, SparkContext
 from math import sqrt
+import datetime
+
+start = datetime.datetime.now()
+print(start)
 
 def loadMovieNames():
     movieNames = {}
-    with open("ml-100k/u.ITEM", encoding='ascii', errors='ignore') as f:
+    with open("C://TamingBigdataWithSparkAndPython/data/ml-100k/u.ITEM", encoding='ascii', errors='ignore') as f:
         for line in f:
             fields = line.split('|')
             movieNames[int(fields[0])] = fields[1]
@@ -44,13 +52,15 @@ def computeCosineSimilarity(ratingPairs):
 
 
 # local[*] : Use every core you hava available on your computer and run a separate executor.
-conf = SparkConf().setMaster("local[*]").setAppName("MovieSimilarities")
+# It's going to be running on more than one process
+# local[*]
+conf = SparkConf().setMaster("local").setAppName("MovieSimilarities")
 sc = SparkContext(conf = conf)
 
 print("\nLoading movie names...")
 nameDict = loadMovieNames()
 
-data = sc.textFile("file:///SparkCourse/ml-100k/u.data")
+data = sc.textFile("file:///\TamingBigdataWithSparkAndPython/data/ml-100k/u.data")
 
 # Map ratings to key / value pairs: user ID => movie ID, rating
 ratings = data.map(lambda l: l.split()).map(lambda l: (int(l[0]), (int(l[1]), float(l[2]))))
@@ -80,27 +90,31 @@ moviePairSimilarities = moviePairRatings.mapValues(computeCosineSimilarity).cach
 #moviePairSimilarities.saveAsTextFile("movie-sims")
 
 # Extract similarities for the movie we care about that are "good".
-if (len(sys.argv) > 1):
+# if (len(sys.argv) > 1):
 
-    scoreThreshold = 0.97
-    coOccurenceThreshold = 50
+scoreThreshold = 0.97
+coOccurenceThreshold = 50
 
-    movieID = int(sys.argv[1])
+#movieID = int(sys.argv[1])
+movieID = int(50)
 
-    # Filter for movies with this sim that are "good" as defined by
-    # our quality thresholds above
-    filteredResults = moviePairSimilarities.filter(lambda pairSim: \
-        (pairSim[0][0] == movieID or pairSim[0][1] == movieID) \
-        and pairSim[1][0] > scoreThreshold and pairSim[1][1] > coOccurenceThreshold)
+# Filter for movies with this sim that are "good" as defined by
+# our quality thresholds above
+filteredResults = moviePairSimilarities.filter(lambda pairSim: \
+    (pairSim[0][0] == movieID or pairSim[0][1] == movieID) \
+    and pairSim[1][0] > scoreThreshold and pairSim[1][1] > coOccurenceThreshold)
 
-    # Sort by quality score.
-    results = filteredResults.map(lambda pairSim: (pairSim[1], pairSim[0])).sortByKey(ascending = False).take(10)
+# Sort by quality score.
+results = filteredResults.map(lambda pairSim: (pairSim[1], pairSim[0])).sortByKey(ascending = False).take(10)
 
-    print("Top 10 similar movies for " + nameDict[movieID])
-    for result in results:
-        (sim, pair) = result
-        # Display the similarity result that isn't the movie we're looking at
-        similarMovieID = pair[0]
-        if (similarMovieID == movieID):
-            similarMovieID = pair[1]
-        print(nameDict[similarMovieID] + "\tscore: " + str(sim[0]) + "\tstrength: " + str(sim[1]))
+print("Top 10 similar movies for " + nameDict[movieID])
+for result in results:
+    (sim, pair) = result
+    # Display the similarity result that isn't the movie we're looking at
+    similarMovieID = pair[0]
+    if (similarMovieID == movieID):
+        similarMovieID = pair[1]
+    print(nameDict[similarMovieID] + "\tscore: " + str(sim[0]) + "\tstrength: " + str(sim[1]))
+
+times = datetime.datetime.now() - start
+print( times )
