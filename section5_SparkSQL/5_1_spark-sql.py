@@ -14,7 +14,7 @@ def mapper(line):
                , numFriends=int(fields[3]))
 
 
-lines = spark.sparkContext.textFile("fakefriends.csv") # is not structured.
+lines = spark.sparkContext.textFile("file:///TamingBigdataWithSparkAndPython/data/fakefriends.csv") # is not structured.
 people = lines.map(mapper)
 
 # Infer the schema, and register the DataFrame as a table.

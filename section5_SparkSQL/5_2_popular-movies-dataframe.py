@@ -4,7 +4,7 @@ from pyspark.sql import functions
 
 def loadMovieNames():
     movieNames = {}
-    with open("ml-100k/u.ITEM") as f:
+    with open("C://TamingBigdataWithSparkAndPython/data/ml-100k/u.ITEM", encoding = "ISO-8859-1" ) as f:
         for line in f:
             fields = line.split('|')
             movieNames[int(fields[0])] = fields[1]
@@ -17,7 +17,10 @@ spark = SparkSession.builder.config("spark.sql.warehouse.dir", "file:///C:/temp"
 nameDict = loadMovieNames()
 
 # Get the raw data
-lines = spark.sparkContext.textFile("file:///SparkCourse/ml-100k/u.data")
+lines = spark.sparkContext.textFile("file:///TamingBigdataWithSparkAndPython/data/ml-100k/u.data")
+## if that was in a structured format like JSON we could do insread, "spark.read.json"
+## and that would convert it directly to a DataFrame.
+
 # Convert it to a RDD of Row objects
 movies = lines.map(lambda x: Row(movieID =int(x.split()[1])))
 # Convert that to a DataFrame
