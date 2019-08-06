@@ -10,15 +10,11 @@ https://sundog-education.com/spark-python/  따라함.
 
 * [http://www.oracle.com/technetwork/java/javase/downloads/index.htm](http://www.oracle.com/technetwork/java/javase/downloads/index.html)[l](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
-  > [주의]
-  >
-  > * 반드시 default location을 변경하여 스페이스('\s')가 없는 경로로 JDK를 설치해줘야한다. (**C:\jdk**)
-  >
-  > * JAVA 8로 설치할 것. (JAVA 9 이상의 버전에서는 호환이 안된다.)
->
-  > * jre도 **C:\jre** 로 변경해주자.
-  >
-  >   ![jre](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/jrefolder.jpg?raw=true)
+  - 반드시 default location을 변경하여 **스페이스('\s')가 없는 경로**로 JDK를 설치해줘야한다. (**C:\jdk**)
+  - **JAVA 8**로 설치할 것. (JAVA 9 이상의 버전에서는 호환이 안된다.)
+  - jre도 **C:\jre** 로 변경해주자.
+  
+  ![jre](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/jrefolder.jpg?raw=true)
 
 
 
@@ -44,8 +40,8 @@ https://sundog-education.com/spark-python/  따라함.
 * 다음 cmd창에서 실행 (권한 변경)
 
 ```c
-	C:\Users\arara>cd c:\tmp\hive\bin
-c:\tmp\hive\bin>winutils.exe chmod 777 c:\tmp\hive
+C:\Users\arara>cd c:\tmp\hive\bin
+C:\tmp\hive\bin>winutils.exe chmod 777 c:\tmp\hive
 ```
 
 ![chmod](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/chmod.jpg?raw=true)
@@ -65,25 +61,27 @@ c:\tmp\hive\bin>winutils.exe chmod 777 c:\tmp\hive
 
 ### 7. 환경변수 추가
 
+![ENV](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/ENV.jpg?raw=tru)
+
+
+
  * **SPARK_HOME**
 
-   ![SPARK_HOME)](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/SPARK_HOME.jpg?raw=true)
+   ![SPARK_HOME](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/SPARK_HOME.jpg?raw=true)
 
  * **JAVA_HOME**
 
-   ![JAVA_HOME)](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/JAVA_HOME.jpg?raw=true)
+   ![JAVA_HOME](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/JAVA_HOME.jpg?raw=true)
 
  * **HADOOP_HOME**
 
-   ![HADOOP_HOME)](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/HADOOP_HOME.jpg?raw=true)
+   ![HADOOP_HOME](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/HADOOP_HOME.jpg?raw=true)
 
-   **!!!! 수정 ===>>>> 변수값 : c:\tmp\hive **
-
-    	\bin 추가시 나중에 c:\tmp\hive\bin\bin 으로 찾아가서 에러남.
+   
 
 
 
-* PATH
+* **PATH**
 
   ![path](https://github.com/arara90/images/blob/master/TamingBigdataWithSparkAndPython/install/PATH.jpg?raw=true)
 
