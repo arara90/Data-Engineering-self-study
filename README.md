@@ -12,9 +12,6 @@
 
 ​	( Jul 30, 2019 ~ Aug 5, 2019 )
 
-![certificate](https://github.com/arara90/images/raw/master/TamingBigdataWithSparkAndPython/certificate.jpg?raw=true)
-
-
 
 ### data
 
