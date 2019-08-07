@@ -3,14 +3,14 @@ import collections
 
 # conf에서 cluster or local 정할 수 있음
 # local machine을 masterNode로 지정했음
-# We're gonna run it in a single thread on a single process that's what local means
+# We're gonna runspar it in a single thread on a single process that's what local means
 conf = SparkConf().setMaster("local").setAppName("RatingsHistogram")
 sc = SparkContext(conf = conf)
 
 # 1. "file:/// 만나면 local , hdfs:///만나면 hdfs 사용"
 #. 2. .data file??
 # lines = sc.textFile("file:///C:/SparkCourse/ml-100k/u.data")
-lines = sc.textFile("file:///SparkCourse/ml-100k/u.data")
+lines = sc.textFile("file:///TamingBigdataWithSparkAndPython/data/ml-100k/u.data")
 # userID movieID ratings date
 
 ratings = lines.map(lambda x: x.split()[2])
