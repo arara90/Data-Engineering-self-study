@@ -28,5 +28,6 @@ print( 'sum_to3 : ', sum_to3)
 
 nums2 = sc.parallelize([1,2,3,4,5,6])
 sum2 = nums2.reduce(lambda x,y : x+y)
-print( 'Sum_reduce : ', sum2)
+print( 'Sum_reduce : ', sum2) # Sum_reduce :  21
+
 
