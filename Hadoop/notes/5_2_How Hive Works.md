@@ -2,9 +2,6 @@
 
 ## How hive works? 
 
-![5_012.png](https://github.com/arara90/images/blob/master/TheUltimateHandsonHadoop-TameYourBingData/5_Hive/5_012.png?raw=true)
-
-
 
 ### Schema on read
 
